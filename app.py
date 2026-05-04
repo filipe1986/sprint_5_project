@@ -4,7 +4,7 @@ import plotly.express as px
 
 st.header('vehicles analysis')
 
-df = pd.read_csv("notebooks/vehicles.csv")
+df = pd.read_csv("vehicles.csv")
 
 hist_checkbox = st.checkbox('Create histogram')
 
