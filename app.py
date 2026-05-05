@@ -15,28 +15,28 @@ if hist_checkbox: # with button click
 
     st.plotly_chart(fig, use_container_width = True)
 
-'''plotly_express = st.checkbox('Create a scatter chart price vs odometer')
-
-if plotly_express: # if clicked
-    st.write('Creating a scatter chart')
-
-    fig_01 = px.scatter(df, x='odometer', y='price')
-
-    st.plotly_chart(fig_01)
-'''
 st.title('Car data viewer')
 
-# a check box for each column
+# Extracting columns for comparison (excluding price itself)
+compare_columns = [col for col in df.columns if col != "price"]
 
-selected_columns = []
+# User selection
+selected_features = st.multiselect("Select columns to compare against Price:",
+                                   options=compare_columns,
+                                   default = ["model_year", "odometer"],)
 
-st.sidebar.write('### choose columns:')
-for col in df.columns:
-    if st.sidebar.checkbox(col, value=True):
-        selected_columns.append(col)
+# Generagin dynamic charts
+if selected_features:
+    for feature in selected_features:
+        st.subheader(f"Price vs {feature.replace('_', ' ').title()}")
 
-if selected_columns:
-    st.dataframe(df[selected_columns])
+        # Check if the column is numeric or categorical to choose the best chart
+        if df[feature].dtype in ["int64", "float64"] and len(df[feature].unique() > 10:
+            # Use scatter chart for continuous numbers
+            st.scatter_chart(df, x=feature, y="price")
+        else:
+            # Use bar chart for categories or discrete numbers
+            st.bar_chart(df, x=feature, y="price")
 else:
-    st.warning("Please, select at least one checkbox")
-    
+    st.warning("Please, select at least one column")
+        )
