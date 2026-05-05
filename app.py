@@ -15,28 +15,12 @@ if hist_checkbox: # with button click
 
     st.plotly_chart(fig, use_container_width = True)
 
-st.title('Car data viewer')
 
-# Extracting columns for comparison (excluding price itself)
-compare_columns = [col for col in df.columns if col != "price"]
+plotly_express = st.checkbox('Create a scatter chart price vs odometer')
 
-# User selection
-selected_features = st.multiselect("Select columns to compare against Price:",
-                                   options=compare_columns,
-                                   default = ["model_year", "odometer"],)
+if plotly_express: # if clicked
+    st.write('Creating a scatter chart')
 
-# Generagin dynamic charts
-if selected_features:
-    for feature in selected_features:
-        st.subheader(f"Price vs {feature.replace('_', ' ').title()}")
+    fig_01 = px.scatter(df, x='odometer', y='price')
 
-        # Check if the column is numeric or categorical to choose the best chart
-        if df[feature].dtype in ["int64", "float64"] and len(df[feature].unique() > 10:
-            # Use scatter chart for continuous numbers
-            st.scatter_chart(df, x=feature, y="price")
-        else:
-            # Use bar chart for categories or discrete numbers
-            st.bar_chart(df, x=feature, y="price")
-else:
-    st.warning("Please, select at least one column")
-        )
+    st.plotly_chart(fig_01)
