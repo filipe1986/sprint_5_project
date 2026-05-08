@@ -1,26 +1,73 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from pathlib import Path
 
-st.header('vehicles analysis')
+st.set_page_config(page_title="Vehicles Analysis", layout="wide")
 
-df = pd.read_csv("vehicles.csv")
+# ╭──────────────────────────────╮
+# │ 1. Carregar dados com cache  │
+# ╰──────────────────────────────╯
+@st.cache_data
+def load_data(csv_path: str | Path) -> pd.DataFrame:
+    df = pd.read_csv(csv_path)
+    # Caso existam colunas com datas ou numéricas como strings,
+    # faça o parsing aqui.
+    # df['date_posted'] = pd.to_datetime(df['date_posted'])
+    return df
 
-hist_checkbox = st.checkbox('Create histogram')
+DATA_PATH = "vehicles.csv"
+df = load_data(DATA_PATH)
 
-if hist_checkbox: # with button click
-    st.write('Creating an histogram to the odometer column')
+# ╭──────────────────────────────╮
+# │ 2. Barra lateral de controles│
+# ╰──────────────────────────────╯
+st.sidebar.header("Configurações de visualização")
 
-    fig = px.histogram(df, x="odometer")
+show_hist   = st.sidebar.checkbox("Histograma (odômetro)")
+show_scatter = st.sidebar.checkbox("Scatter: preço × odômetro")
 
-    st.plotly_chart(fig, use_container_width = True)
+if show_hist:
+    # Opcional: escolha do número de bins
+    bins = st.sidebar.slider("Número de bins do histograma",
+                             min_value=10, max_value=100, value=50, step=5)
 
+if show_scatter:
+    # Exemplo: colorir por condição, se existir
+    default_color = "condition" if "condition" in df.columns else None
+    color_col = st.sidebar.selectbox("Colorir scatter por:",
+                                     options=[None] + list(df.columns),
+                                     index=0 if default_color is None else
+                                     list(df.columns).index(default_color)+1)
 
-plotly_express = st.checkbox('Create a scatter chart price vs odometer')
+st.title("🚗 Vehicles Analysis")
 
-if plotly_express: # if clicked
-    st.write('Creating a scatter chart')
+# ╭──────────────────────────────╮
+# │ 3. Geração dos gráficos      │
+# ╰──────────────────────────────╯
+def plot_histogram(data: pd.DataFrame, nbins: int):
+    fig = px.histogram(data, x="odometer", nbins=nbins,
+                       title=f"Distribuição do odômetro (bins={nbins})")
+    fig.update_layout(margin=dict(l=20, r=20, t=60, b=40))
+    st.plotly_chart(fig, use_container_width=True)
 
-    fig_01 = px.scatter(df, x='odometer', y='price')
+def plot_scatter(data: pd.DataFrame, color: str | None):
+    fig = px.scatter(data, x="odometer", y="price",
+                     color=color,
+                     title="Relação preço × odômetro"
+                           + (f" (cor = {color})" if color else ""))
+    fig.update_layout(margin=dict(l=20, r=20, t=60, b=40))
+    st.plotly_chart(fig, use_container_width=True)
 
-    st.plotly_chart(fig_01)
+# Dispatcher
+if show_hist:
+    st.subheader("Histograma do odômetro")
+    plot_histogram(df, bins)
+
+if show_scatter:
+    st.subheader("Scatter: preço × odômetro")
+    plot_scatter(df, color_col)
+
+if not (show_hist or show_scatter):
+    st.info("☝️ Use a barra lateral para escolher o(s) gráfico(s).")
+    
