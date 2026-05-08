@@ -3,31 +3,6 @@ import pandas as pd
 import plotly.express as px
 from pathlib import Path
 
-st.markdown("""
-    <style>
-    /* 1. Target the main sidebar container */
-    section[data-testid="stSidebar"] {
-        cursor: auto;
-    }
-
-    /* 2. Target every clickable/interactive part of the widgets */
-    section[data-testid="stSidebar"] label, 
-    section[data-testid="stSidebar"] p, 
-    section[data-testid="stSidebar"] span, 
-    section[data-testid="stSidebar"] div[data-baseweb="checkbox"],
-    section[data-testid="stSidebar"] div[data-baseweb="select"] {
-        cursor: pointer !important;
-    }
-    
-    /* 3. Ensure the slider handle and track also use a pointer */
-    section[data-testid="stSidebar"] [role="slider"],
-    section[data-testid="stSidebar"] [data-testid="stSlider"] {
-        cursor: pointer !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-
 st.set_page_config(page_title="Vehicles Analysis", layout="wide")
 
 @st.cache_data
@@ -82,7 +57,7 @@ if show_hist:
     plot_histogram(df, bins)
 
 if show_scatter:
-    st.subheader("Scatter: preço × odômetro")
+    st.subheader("Scatter: price × other characteristics")
     plot_scatter(df, color_col)
 
 if not (show_hist or show_scatter):
