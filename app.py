@@ -4,14 +4,29 @@ import plotly.express as px
 from pathlib import Path
 
 st.markdown("""
-<style>
-            /* This targets the labels and containers of checkboxes and selecboxes */
-            selection[data-testid="stSidebar"] .stCheckbox label,
-            selection[data-testid="stSidebar"] .stSelectbox div {
-            cursor: pointer !important;
-            }    
-</style>
-            """, unsafe_allow_html=True)
+    <style>
+    /* 1. Target the main sidebar container */
+    section[data-testid="stSidebar"] {
+        cursor: auto;
+    }
+
+    /* 2. Target every clickable/interactive part of the widgets */
+    section[data-testid="stSidebar"] label, 
+    section[data-testid="stSidebar"] p, 
+    section[data-testid="stSidebar"] span, 
+    section[data-testid="stSidebar"] div[data-baseweb="checkbox"],
+    section[data-testid="stSidebar"] div[data-baseweb="select"] {
+        cursor: pointer !important;
+    }
+    
+    /* 3. Ensure the slider handle and track also use a pointer */
+    section[data-testid="stSidebar"] [role="slider"],
+    section[data-testid="stSidebar"] [data-testid="stSlider"] {
+        cursor: pointer !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 
 st.set_page_config(page_title="Vehicles Analysis", layout="wide")
 
