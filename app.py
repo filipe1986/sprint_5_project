@@ -44,7 +44,7 @@ def plot_histogram(data: pd.DataFrame, nbins: int):
     st.plotly_chart(fig, use_container_width=True)
 
 def plot_scatter(data: pd.DataFrame, color: str | None):
-    fig = px.scatter(data, x="other characteristics ", y="price",
+    fig = px.scatter(data, x="odometer", y="price",
                      color=color,
                      title=" "
                            + (f" (cor = {color})" if color else ""))
