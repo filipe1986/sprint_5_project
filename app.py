@@ -3,6 +3,16 @@ import pandas as pd
 import plotly.express as px
 from pathlib import Path
 
+st.markdown("""
+<style>
+            /* This targets the labels and containers of checkboxes and selecboxes */
+            selection[data-testid="stSidebar"] .stCheckbox label,
+            selection[data-testid="stSidebar"] .stSelectbox div {
+            cursor: pointer !important;
+            }    
+</style>
+            """, unsafe_allow_html=True)
+
 st.set_page_config(page_title="Vehicles Analysis", layout="wide")
 
 @st.cache_data
