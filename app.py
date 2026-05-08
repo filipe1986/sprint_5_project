@@ -8,9 +8,8 @@ st.set_page_config(page_title="Vehicles Analysis", layout="wide")
 @st.cache_data
 def load_data(csv_path: str | Path) -> pd.DataFrame:
     df = pd.read_csv(csv_path)
-    # Caso existam colunas com datas ou numéricas como strings,
-    # faça o parsing aqui.
-    df['date_posted'] = pd.to_datetime(df['date_posted'])
+  
+    #df['date_posted'] = pd.to_datetime(df['date_posted'])
     return df
 
 DATA_PATH = "vehicles.csv"
@@ -20,7 +19,7 @@ df = load_data(DATA_PATH)
 st.sidebar.header("Visualization")
 
 show_hist   = st.sidebar.checkbox("Histogram (odometer)")
-show_scatter = st.sidebar.checkbox("Scatter: price × odmeter")
+show_scatter = st.sidebar.checkbox("Scatter: price × other characteristics")
 
 if show_hist:
     # bins number choice
@@ -45,7 +44,7 @@ def plot_histogram(data: pd.DataFrame, nbins: int):
     st.plotly_chart(fig, use_container_width=True)
 
 def plot_scatter(data: pd.DataFrame, color: str | None):
-    fig = px.scatter(data, x=" ", y="price",
+    fig = px.scatter(data, x="other characteristics ", y="price",
                      color=color,
                      title=" "
                            + (f" (cor = {color})" if color else ""))
