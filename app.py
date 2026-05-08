@@ -40,14 +40,14 @@ st.title("🚗 Vehicles Analysis")
 # generatin the charts
 def plot_histogram(data: pd.DataFrame, nbins: int):
     fig = px.histogram(data, x="odometer", nbins=nbins,
-                       title=f"odometer distribution (bins={nbins})")
+                       title=f" (bins={nbins})")
     fig.update_layout(margin=dict(l=20, r=20, t=60, b=40))
     st.plotly_chart(fig, use_container_width=True)
 
 def plot_scatter(data: pd.DataFrame, color: str | None):
-    fig = px.scatter(data, x="odometer", y="price",
+    fig = px.scatter(data, x=" ", y="price",
                      color=color,
-                     title="price × odometer"
+                     title=" "
                            + (f" (cor = {color})" if color else ""))
     fig.update_layout(margin=dict(l=20, r=20, t=60, b=40))
     st.plotly_chart(fig, use_container_width=True)
